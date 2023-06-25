@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import Spinner from '../layout/Spinner';
+import UserItem from './UserItem';
 
 function UserResults() {
 const url = 'https://api.github.com'
-const token = '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'
+const token = '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'
 const [users, setUsers] = useState([])
    const [loading, setLoading] = useState(true)
 useEffect(() => {
@@ -30,11 +32,11 @@ useEffect(() => {
 if (!loading){
 return (
     <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>{users.map((user) => (
-        <h3 key={user.id}>{user.login}</h3>
+        <UserItem key={user.id} user={user}/>
     ))}</div>
   )
 }else {
-    return <h3>Loading...</h3>
+    return <Spinner />
 }
   
 }
