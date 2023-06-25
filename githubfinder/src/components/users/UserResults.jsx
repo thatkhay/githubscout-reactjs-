@@ -1,44 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import React, { useEffect, useContext } from 'react';
+import GithubContext from '../../context/github/GithubContext';
 import Spinner from '../layout/Spinner';
 import UserItem from './UserItem';
 
 function UserResults() {
-const url = 'https://api.github.com'
-const token = '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'
-const [users, setUsers] = useState([])
-   const [loading, setLoading] = useState(true)
-useEffect(() => {
-    
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${url}/users`, {
-          headers: {
-            Authorization: `token ${token}`
-          }
-        });
-        console.log(response.data);
-        setUsers(response.data);
-        setLoading(false)
+  const { users, loading, fetchUsers } = useContext(GithubContext); // Added '=' sign
 
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+  useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
-if (!loading){
-return (
-    <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>{users.map((user) => (
-        <UserItem key={user.id} user={user}/>
-    ))}</div>
-  )
-}else {
-    return <Spinner />
-}
-  
+  if (!loading) {
+    return (
+      <div className='grid grid-cols-1 gap-8 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2'>
+        {users.map((user) => (
+          <UserItem key={user.id} user={user} />
+        ))}
+      </div>
+    );
+  } else {
+    return <Spinner />;
+  }
 }
 
-export default UserResults
+export default UserResults;
